@@ -1,0 +1,40 @@
+import statsmodels.stats.weightstats as stm
+import scipy.stats as st
+import pandas as pd
+import math
+import numpy as np
+
+df = pd.read_csv (r'C:\temp\deadfishies.csv')
+
+# get only values from the column (exclude header)
+sample = df["Mercury"]
+
+# compute mean and standard deviation of the sample in the given file
+print("Computing the basic statistics ...")
+Mermean = np.mean(sample)
+Merstd = np.std (sample)
+Mersize = len(sample)
+
+print("Mean: %.4f. Standard deviation: %.4f. Size: %d." % (Mermean, Merstd, Mersize))
+
+# compute standard error
+std_err = Merstd / math.sqrt(Mersize)
+print("Standard error: %.2f" % std_err)
+
+# determine degrees of freedom (required when using t-statistic)
+df = Mersize - 1
+print("Degrees of freedom: %d" % df)
+
+# confidence level
+conf_lvl = 0.99
+print("Confidence level: %.2f" % conf_lvl)
+
+# significance level (alpha)
+sig_lvl = 1 - conf_lvl
+print("Significance level: %.2f" % sig_lvl)
+
+# use t-statistic  when calculating confidence interval
+ci_low_stm, ci_upp_stm = stm._tconfint_generic(Mermean,std_err,df, alpha=sig_lvl, alternative="two-sided")
+print("C.I. of the mean at %d%% confidence level is between %.2f and %.2f." %
+      (conf_lvl*100, ci_low_stm, ci_upp_stm))
+

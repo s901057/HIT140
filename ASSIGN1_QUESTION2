@@ -1,0 +1,65 @@
+
+import scikit_posthocs as sp
+from scipy import stats
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from statsmodels.graphics.gofplots import qqplot
+
+def check_normality(data):
+    test_stat_normality, p_value_normality=stats.shapiro(data)
+    print("p value:%.4f" % p_value_normality)
+    if p_value_normality <0.05:
+        print("Reject null hypothesis >> The data is not normally distributed")
+    else:
+        print("Fail to reject null hypothesis >> The data is normally distributed")
+
+
+
+df = pd.read_csv(r'C:\temp\deadfishies2.csv')
+df.head()
+
+# boxplot = df.boxplot(fontsize=8, column=['Mercury', 'Elevation', 'Drainage Area', 'Surface Area','Max Depth','RF','FR','Dam','RT','RS'''])
+col1 = df['Mercury']
+col2 = df['Elevation']
+col3 = df['Drainage Area']
+col4 = df['Surface Area']
+col5 = df['Max Depth']
+col6 = df['RF']
+col7 = df['FR']
+col8 = df['Dam']
+col9 = df['RT']
+col10 = df['RS']
+# df.query("A == 2 & B > 1 & C != 'z'").shape[0]
+print("Describe the distribution")
+print(col10.describe())
+print("Central Tendancy CALC:Measure the Mean")
+print(col10.mean())
+print("Central Tendancy CALC:Measure the Median")
+print(col10.median())
+print("Central Tendancy CALC:Measure the Mode")
+print(col10.mode())
+print("SPREAD CALC: Quartiles")
+print(np.quantile(col10, [0, 0.25, 0.5, 0.75, 1]))
+print("SPREAD CALC: Quantiles")
+print(np.quantile(col10, np.linspace(0, 1, 5)))
+print("SPREAD CALC: Deciles")
+print(np.quantile(col10, np.linspace(0, 1, 11)))
+print("SPREAD CALC: Interquartile Range ")
+IQR = np.quantile(col10, 0.75) - np.quantile(col10, 0.25)
+print(IQR)
+print("DISTRIBUTION normality Shapiro-Wilk’s W Test")
+print(check_normality(col10))
+
+
+
+
+# boxplot = df.boxplot(column=['Mercury',   'Drainage Area'])
+
+# boxplot = df.boxplot(column=['RS'])
+# boxplot = df.boxplot(by='Surface Area')
+# plt.hist(col10, edgecolor='black', bins=20)
+
+# showing the graph
+plt.show()
